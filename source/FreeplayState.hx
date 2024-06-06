@@ -1503,7 +1503,6 @@ class FreeplayState extends MusicBeatState {
 		{
 			curDifficulty = 0;
 		}
-	}
 		
 		try {
 			var song = songs[curSelected].songName.toLowerCase();

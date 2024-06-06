@@ -1470,6 +1470,7 @@ class FreeplayState extends MusicBeatState {
 			curDifficulty = 0;
 		var rate:Float = 0;
 		
+		CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
 		
 		try {
 			var song = songs[curSelected].songName.toLowerCase();
@@ -1486,7 +1487,8 @@ class FreeplayState extends MusicBeatState {
 	function updateInfoText()
 	{		
 		try {
-		difficultyText.text = CoolUtil.difficulties[curDifficulty];
+		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
+		difficultyText.text = lastDifficultyName.toUpperCase;
 		difficultyText.x = (820 - difficultyText.width) / 2;
 		if (difficultyText.width > 300)
 			difficultyText.scale.set(300/difficultyText.width, 300/difficultyText.width);

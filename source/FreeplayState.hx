@@ -8,12 +8,13 @@ import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import openfl.display.Shape;
 
-import objects.HealthIcon;
-import states.editors.ChartingState;
+import HealthIcon;
+import editors.ChartingState;
 
-import substates.GameplayChangersSubstate;
-import substates.ResetScoreSubState;
+import GameplayChangersSubstate;
+import ResetScoreSubState;
 
+import flixel.tweens.FlxTween;
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup;
@@ -28,11 +29,11 @@ import flixel.math.FlxRect;
 import sys.FileSystem;
 #end
 
-import states.FreeplayState;
+import FreeplayState;
 
-import states.PlayState;
-import states.LoadingState;
-import states.MainMenuState;
+import PlayState;
+import LoadingState;
+import MainMenuState;
 import options.OptionsState;
 
 /*

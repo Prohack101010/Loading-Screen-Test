@@ -296,11 +296,11 @@ class FreeplayState extends MusicBeatState {
 		RateBarText.y = 305;
 		add(RateBarText);
 		
-		var diffText:FlxText = new FlxText(360, 355, 0, "DIFFICULTY", 15);
-		diffText.setFormat(font, 15, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
-		diffText.camera = camInfo;
-		diffText.antialiasing = ClientPrefs.globalAntialiasing;
-		add(diffText);
+		var difficultyText:FlxText = new FlxText(360, 355, 0, "DIFFICULTY", 15);
+		difficultyText.setFormat(font, 15, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
+		difficultyText.camera = camInfo;
+		difficultyText.antialiasing = ClientPrefs.globalAntialiasing;
+		add(difficultyText);
 		
 		difficultyText = new FlxText(300, 360, 0, "difficulty", 55);
 		difficultyText.setFormat(font, 55, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
@@ -1456,6 +1456,14 @@ class FreeplayState extends MusicBeatState {
 	
 	function changeDiff(value:Int)
 	{
+	    curDifficulty += change;
+
+		if (curDifficulty < 0)
+			curDifficulty = CoolUtil.difficulties.length-1;
+		if (curDifficulty >= CoolUtil.difficulties.length)
+			curDifficulty = 0;
+			
+	
 	    /*
 		curDifficulty += value;
 		if (curDifficulty < 0)
@@ -1463,11 +1471,13 @@ class FreeplayState extends MusicBeatState {
 		if (curDifficulty > CoolUtil.difficulties.length - 1)
 			curDifficulty = 0;
 		*/
-		if (curDifficulty < 0)
-			curDifficulty = CoolUtil.difficulties.length-1;
-		if (curDifficulty >= CoolUtil.difficulties.length)
-			curDifficulty = 0;
 		var rate:Float = 0;
+
+		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
+		if (CoolUtil.difficulties.length > 1)
+			difficultyText.text = '< ' + lastDifficultyName.toUpperCase() + ' >';
+		else
+			difficultyText.text = lastDifficultyName.toUpperCase();
 		
 		
 		try {

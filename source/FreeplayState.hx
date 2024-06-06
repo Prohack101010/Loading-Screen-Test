@@ -1436,7 +1436,7 @@ class FreeplayState extends MusicBeatState {
 		Paths.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
 		bgCheck();
-		changeDiff(0);
+		changeDiff();
 		
 		songNameText.text = songs[curSelected].songName;
 		songNameText.scale.x = 1;
@@ -1495,7 +1495,6 @@ class FreeplayState extends MusicBeatState {
 	function updateInfoText()
 	{		
 		try {
-		difficultyText.text = CoolUtil.difficulties[curDifficulty];
 		difficultyText.x = (820 - difficultyText.width) / 2;
 		if (difficultyText.width > 300)
 			difficultyText.scale.set(300/difficultyText.width, 300/difficultyText.width);

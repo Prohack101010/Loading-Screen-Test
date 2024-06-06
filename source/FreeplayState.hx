@@ -124,7 +124,7 @@ class FreeplayState extends MusicBeatState {
 	private static var curSelectedFloat:Float;
 	var lerpSelected:Float = 0;
 	public static var curDifficulty:Int = -1;
-	private static var lastDifficultyName:String = Difficulty.getDefault();
+	private static var lastDifficultyName:String = '';
 	
 	var camGame:FlxCamera;
 	var camSong:FlxCamera;
@@ -1453,8 +1453,8 @@ class FreeplayState extends MusicBeatState {
 	{
 		curDifficulty += value;
 		if (curDifficulty < 0)
-			curDifficulty = Difficulty.list.length-1;
-		if (curDifficulty > Difficulty.list.length - 1)
+			curDifficulty = CoolUtil.difficulties.length-1;
+		if (curDifficulty > CoolUtil.difficulties.length - 1)
 			curDifficulty = 0;
 		var rate:Float = 0;
 		

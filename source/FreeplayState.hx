@@ -1469,19 +1469,6 @@ class FreeplayState extends MusicBeatState {
 			curDifficulty = 0;
 		var rate:Float = 0;
 		
-		#if !switch
-		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
-		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
-		#end
-
-		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
-		if (CoolUtil.difficulties.length > 1)
-			diffText.text = '< ' + lastDifficultyName.toUpperCase() + ' >';
-		else
-			diffText.text = lastDifficultyName.toUpperCase();
-
-		positionHighscore();
-		
 		
 		try {
 			var song = songs[curSelected].songName.toLowerCase();
@@ -1494,16 +1481,7 @@ class FreeplayState extends MusicBeatState {
 		
 		updateInfoText();
 	}
-	
-	private function positionHighscore() {
-		scoreText.x = FlxG.width - scoreText.width - 6;
-
-		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
-		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
-		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
-		diffText.x -= diffText.width / 2;
-	}
-	
+		
 	function updateInfoText()
 	{		
 		try {

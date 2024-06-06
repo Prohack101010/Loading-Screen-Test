@@ -40,6 +40,7 @@ import flixel.addons.ui.FlxInputText;
 import flixel.util.FlxStringUtil;
 import flixel.ui.FlxBar;
 import flixel.math.FlxRect;
+import flixel.util.FlxTimer;
 
 #if MODS_ALLOWED
 import sys.FileSystem;

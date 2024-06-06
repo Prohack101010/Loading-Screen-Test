@@ -296,11 +296,11 @@ class FreeplayState extends MusicBeatState {
 		RateBarText.y = 305;
 		add(RateBarText);
 		
-		var difficultyText:FlxText = new FlxText(360, 355, 0, "DIFFICULTY", 15);
-		difficultyText.setFormat(font, 15, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
-		difficultyText.camera = camInfo;
-		difficultyText.antialiasing = ClientPrefs.globalAntialiasing;
-		add(difficultyText);
+		var diffText:FlxText = new FlxText(360, 355, 0, "DIFFICULTY", 15);
+		diffText.setFormat(font, 15, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
+		diffText.camera = camInfo;
+		diffText.antialiasing = ClientPrefs.globalAntialiasing;
+		add(diffText);
 		
 		difficultyText = new FlxText(300, 360, 0, "difficulty", 55);
 		difficultyText.setFormat(font, 55, FlxColor.WHITE, FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
@@ -1436,7 +1436,7 @@ class FreeplayState extends MusicBeatState {
 		Paths.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
 		bgCheck();
-		changeDiff();
+		changeDiff(0);
 		
 		songNameText.text = songs[curSelected].songName;
 		songNameText.scale.x = 1;
@@ -1454,16 +1454,8 @@ class FreeplayState extends MusicBeatState {
 		songIcon.updateHitbox();
 	}
 	
-	function changeDiff(value:Int = 0)
+	function changeDiff(value:Int)
 	{
-	    curDifficulty += value;
-
-		if (curDifficulty < 0)
-			curDifficulty = CoolUtil.difficulties.length-1;
-		if (curDifficulty >= CoolUtil.difficulties.length)
-			curDifficulty = 0;
-			
-	
 	    /*
 		curDifficulty += value;
 		if (curDifficulty < 0)
@@ -1471,13 +1463,12 @@ class FreeplayState extends MusicBeatState {
 		if (curDifficulty > CoolUtil.difficulties.length - 1)
 			curDifficulty = 0;
 		*/
+		curDifficulty += value;
+		if (curDifficulty < 0)
+			curDifficulty = CoolUtil.difficulties.length-1;
+		if (curDifficulty >= CoolUtil.difficulties.length)
+			curDifficulty = 0;
 		var rate:Float = 0;
-
-		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
-		if (CoolUtil.difficulties.length > 1)
-			difficultyText.text = '< ' + lastDifficultyName.toUpperCase() + ' >';
-		else
-			difficultyText.text = lastDifficultyName.toUpperCase();
 		
 		
 		try {
@@ -1495,6 +1486,7 @@ class FreeplayState extends MusicBeatState {
 	function updateInfoText()
 	{		
 		try {
+		difficultyText.text = CoolUtil.difficulties[curDifficulty];
 		difficultyText.x = (820 - difficultyText.width) / 2;
 		if (difficultyText.width > 300)
 			difficultyText.scale.set(300/difficultyText.width, 300/difficultyText.width);

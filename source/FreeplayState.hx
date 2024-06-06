@@ -314,7 +314,7 @@ class FreeplayState extends MusicBeatState {
 		ateText.antialiasing = ClientPrefs.globalAntialiasing;
 		add(ateText);
 		
-		rateText = new FlxText(130, 273, 0, "rate", 30);
+		rateText = new FlxText(130, 273, 0, "beta", 30);
 		rateText.setFormat(font, 25, FlxColor.WHITE, 'left', FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
 		rateText.camera = camInfo;
 		rateText.antialiasing = ClientPrefs.globalAntialiasing;
@@ -545,14 +545,17 @@ class FreeplayState extends MusicBeatState {
 					FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
 					changeSong(-2 * FlxG.mouse.wheel);
 					curSelectedFloat = curSelected;
+					changeDiff(0);
 				}
 				
 				if (controls.UI_DOWN_P) {
 					changeSong(1);
 					curSelectedFloat = curSelected;
+					changeDiff(0);
 				} else if (controls.UI_UP_P) {
 					changeSong(-1);
 					curSelectedFloat = curSelected;
+					changeDiff(0);
 				}
 			}
 			
@@ -594,6 +597,7 @@ class FreeplayState extends MusicBeatState {
 			if ((overlapButton(randomButton) && FlxG.mouse.justPressed) || FlxG.keys.justPressed.O) {
 				curSelected = FlxG.random.int(0, songs.length-1);
 				changeSong(0);
+				changeDiff(0);
 				curSelectedFloat = curSelected;
 			}
 			
@@ -1170,6 +1174,7 @@ class FreeplayState extends MusicBeatState {
 				curSelected = songsSearched[searchSelected + i].searchnum;
 				curSelectedFloat = curSelected;
 				changeSong(0);
+				changeDiff(0);
 			}
 		}
 		
@@ -1187,12 +1192,15 @@ class FreeplayState extends MusicBeatState {
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
 				searchChangeSong(-2 * FlxG.mouse.wheel);
+				changeDiff(0);
 			}
 			
 			if (controls.UI_UP_P)
 				searchChangeSong(-1);
+				changeDiff(0);
 			else if (controls.UI_DOWN_P)
 				searchChangeSong(1);
+				changeDiff(0);
 		}
 	}
 	
@@ -1248,11 +1256,7 @@ class FreeplayState extends MusicBeatState {
         				colorTween.cancel();
         			}
         			
-        			if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.pressed #end){
-        				LoadingState.loadAndSwitchState(new ChartingState());
-        			}else{
-        				LoadingState.loadAndSwitchState(new PlayState());
-        			}
+        			LoadingState.loadAndSwitchState(new PlayState());
         
         			FlxG.sound.music.volume = 0;
         					
@@ -1333,6 +1337,7 @@ class FreeplayState extends MusicBeatState {
 					
 				curSelectedFloat = curSelected;
 				changeSong(0);
+				changeDiff(0);
 				return;
 			}
 			

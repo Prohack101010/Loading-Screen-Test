@@ -1234,17 +1234,29 @@ class FreeplayState extends MusicBeatState {
 				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
 				try
 				{
-					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
-					PlayState.isStoryMode = false;
-					PlayState.storyDifficulty = curDifficulty;
-		
-					if(colorTween != null) {
-						colorTween.cancel();
-					}
-					
-					if(bgColorChange != null) {
-						bgColorChange.cancel();
-					}
+					persistentUpdate = false;
+        			var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
+        			var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
+        			trace(poop);
+        
+        			PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+        			PlayState.isStoryMode = false;
+        			PlayState.storyDifficulty = curDifficulty;
+        
+        			trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+        			if(colorTween != null) {
+        				colorTween.cancel();
+        			}
+        			
+        			if (FlxG.keys.pressed.SHIFT #if android || _virtualpad.buttonZ.pressed #end){
+        				LoadingState.loadAndSwitchState(new ChartingState());
+        			}else{
+        				LoadingState.loadAndSwitchState(new PlayState());
+        			}
+        
+        			FlxG.sound.music.volume = 0;
+        					
+        			destroyFreeplayVocals();
 					
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 				}
@@ -1444,12 +1456,32 @@ class FreeplayState extends MusicBeatState {
 	
 	function changeDiff(value:Int)
 	{
+	    /*
 		curDifficulty += value;
 		if (curDifficulty < 0)
 			curDifficulty = CoolUtil.difficulties.length-1;
 		if (curDifficulty > CoolUtil.difficulties.length - 1)
 			curDifficulty = 0;
+		*/
+		if (curDifficulty < 0)
+			curDifficulty = CoolUtil.difficulties.length-1;
+		if (curDifficulty >= CoolUtil.difficulties.length)
+			curDifficulty = 0;
 		var rate:Float = 0;
+		
+		#if !switch
+		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
+		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
+		#end
+
+		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
+		if (CoolUtil.difficulties.length > 1)
+			diffText.text = '< ' + lastDifficultyName.toUpperCase() + ' >';
+		else
+			diffText.text = lastDifficultyName.toUpperCase();
+
+		positionHighscore();
+		
 		
 		try {
 			var song = songs[curSelected].songName.toLowerCase();
@@ -1461,6 +1493,15 @@ class FreeplayState extends MusicBeatState {
 		}
 		
 		updateInfoText();
+	}
+	
+	private function positionHighscore() {
+		scoreText.x = FlxG.width - scoreText.width - 6;
+
+		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+		scoreBG.x = FlxG.width - (scoreBG.scale.x / 2);
+		diffText.x = Std.int(scoreBG.x + (scoreBG.width / 2));
+		diffText.x -= diffText.width / 2;
 	}
 	
 	function updateInfoText()

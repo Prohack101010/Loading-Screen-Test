@@ -1438,7 +1438,6 @@ class FreeplayState extends MusicBeatState {
 		
 				CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
 		var diffStr:String = WeekData.getCurrentWeek().difficulties;
-		if(diffStr != null) diffStr = diffStr.trim(); //Fuck you HTML5
 
 		if(diffStr != null && diffStr.length > 0)
 		{
@@ -1448,7 +1447,6 @@ class FreeplayState extends MusicBeatState {
 			{
 				if(diffs[i] != null)
 				{
-					diffs[i] = diffs[i].trim();
 					if(diffs[i].length < 1) diffs.remove(diffs[i]);
 				}
 				--i;

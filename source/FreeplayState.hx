@@ -314,7 +314,7 @@ class FreeplayState extends MusicBeatState {
 		ateText.antialiasing = ClientPrefs.globalAntialiasing;
 		add(ateText);
 		
-		rateText = new FlxText(130, 273, 0, "beta", 30);
+		rateText = new FlxText(130, 273, 0, "rate", 30);
 		rateText.setFormat(font, 25, FlxColor.WHITE, 'left', FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
 		rateText.camera = camInfo;
 		rateText.antialiasing = ClientPrefs.globalAntialiasing;
@@ -516,6 +516,7 @@ class FreeplayState extends MusicBeatState {
 		
 		curSelectedFloat = curSelected;
 		changeSong(0);
+		changeDiff(0);
 		
 		camSong.scroll.x = FlxMath.lerp(-(curSelected) * 20 * 0.75, camSong.scroll.x, 0);
 		camSong.scroll.y = FlxMath.lerp((curSelected) * 75 * 0.75, camSong.scroll.y, 0);
@@ -545,17 +546,16 @@ class FreeplayState extends MusicBeatState {
 					FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
 					changeSong(-2 * FlxG.mouse.wheel);
 					curSelectedFloat = curSelected;
-					changeDiff(0);
 				}
 				
 				if (controls.UI_DOWN_P) {
 					changeSong(1);
-					curSelectedFloat = curSelected;
 					changeDiff(0);
+					curSelectedFloat = curSelected;
 				} else if (controls.UI_UP_P) {
 					changeSong(-1);
-					curSelectedFloat = curSelected;
 					changeDiff(0);
+					curSelectedFloat = curSelected;
 				}
 			}
 			
@@ -597,7 +597,6 @@ class FreeplayState extends MusicBeatState {
 			if ((overlapButton(randomButton) && FlxG.mouse.justPressed) || FlxG.keys.justPressed.O) {
 				curSelected = FlxG.random.int(0, songs.length-1);
 				changeSong(0);
-				changeDiff(0);
 				curSelectedFloat = curSelected;
 			}
 			
@@ -1027,15 +1026,6 @@ class FreeplayState extends MusicBeatState {
 		}
 		vocals = null;
 	}
-	/*
-	public static function destroyFreeplayVocals() {
-		if(FreeplayState.vocals != null) {
-			FreeplayState.vocals.stop();
-			FreeplayState.vocals.destroy();
-		}
-		FreeplayState.vocals = null;
-	}
-	*/
 	
 	function closeListenMenu() {
 		listening = false;
@@ -1174,7 +1164,6 @@ class FreeplayState extends MusicBeatState {
 				curSelected = songsSearched[searchSelected + i].searchnum;
 				curSelectedFloat = curSelected;
 				changeSong(0);
-				changeDiff(0);
 			}
 		}
 		
@@ -1192,18 +1181,14 @@ class FreeplayState extends MusicBeatState {
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.2);
 				searchChangeSong(-2 * FlxG.mouse.wheel);
-				changeDiff(0);
 			}
 			
-			if (controls.UI_UP_P) {
+			if (controls.UI_UP_P)
 				searchChangeSong(-1);
-				changeDiff(0);
-			} else if (controls.UI_DOWN_P) {
+			else if (controls.UI_DOWN_P)
 				searchChangeSong(1);
-				changeDiff(0);
-			}
-			}
 		}
+	}
 	
 	function searchChangeSong(num:Int) {
 		searchSelected += num;
@@ -1338,7 +1323,6 @@ class FreeplayState extends MusicBeatState {
 					
 				curSelectedFloat = curSelected;
 				changeSong(0);
-				changeDiff(0);
 				return;
 			}
 			
@@ -1442,7 +1426,7 @@ class FreeplayState extends MusicBeatState {
 		Paths.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
 		
-				CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
+		CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
 		var diffStr:String = WeekData.getCurrentWeek().difficulties;
 
 		if(diffStr != null && diffStr.length > 0)
@@ -1493,19 +1477,19 @@ class FreeplayState extends MusicBeatState {
 	
 	function changeDiff(value:Int)
 	{
-	    /*
 		curDifficulty += value;
 		if (curDifficulty < 0)
 			curDifficulty = CoolUtil.difficulties.length-1;
 		if (curDifficulty > CoolUtil.difficulties.length - 1)
 			curDifficulty = 0;
-		*/
+		/*
 		curDifficulty += value;
 		if (curDifficulty < 0)
 			curDifficulty = CoolUtil.difficulties.length-1;
 		if (curDifficulty >= CoolUtil.difficulties.length)
 			curDifficulty = 0;
 		var rate:Float = 0;
+		*/
 		
 		Paths.currentModDirectory = songs[curSelected].folder;
 		PlayState.storyWeek = songs[curSelected].week;
@@ -1525,6 +1509,40 @@ class FreeplayState extends MusicBeatState {
 	function updateInfoText()
 	{		
 		try {
+		Paths.currentModDirectory = songs[curSelected].folder;
+		PlayState.storyWeek = songs[curSelected].week;
+		
+		CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
+		var diffStr:String = WeekData.getCurrentWeek().difficulties;
+
+		if(diffStr != null && diffStr.length > 0)
+		{
+			var diffs:Array<String> = diffStr.split(',');
+			var i:Int = diffs.length - 1;
+			while (i > 0)
+			{
+				if(diffs[i] != null)
+				{
+					if(diffs[i].length < 1) diffs.remove(diffs[i]);
+				}
+				--i;
+			}
+
+			if(diffs.length > 0 && diffs[0].length > 0)
+			{
+				CoolUtil.difficulties = diffs;
+			}
+		}
+		
+		if(CoolUtil.difficulties.contains(CoolUtil.defaultDifficulty))
+		{
+			curDifficulty = Math.round(Math.max(0, CoolUtil.defaultDifficulties.indexOf(CoolUtil.defaultDifficulty)));
+		}
+		else
+		{
+			curDifficulty = 0;
+		}
+		
 		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
 		difficultyText.text = lastDifficultyName.toUpperCase();
 		difficultyText.x = (820 - difficultyText.width) / 2;
@@ -1725,71 +1743,3 @@ class SongMetadata
 		if(this.folder == null) this.folder = '';
 	}
 }
-/*
-class songButton extend FlxSpriteGroup
-{
-    var bg:FlxSprite = new FlxSprite();
-    var shape:Shape = new Shape();     
-        
-    public function new(X:Int ,Y:Int, Width:Int, Height:Int)
-    {
-        X = this.x;
-        Y = this.y;
-        
-        bg = new FlxSprite().makeGraphic(Width, Height, FlxColor.BLACK);;
-        shape = new Shape();              
-        
-        var BitmapData:BitmapData = new BitmapData(Width, Height, 0x00FFFFFF);
-        BitmapData.fromFile(Paths.image(filePath + 'songBarShadow'));
-        BitmapData.draw(shape);   
-        
-        var BitmapData:BitmapData = new BitmapData(Width, Height, 0x00FFFFFF);
-        BitmapData.fromFile(Paths.image(filePath + 'songBar'));
-        BitmapData.draw(shape);   
-        
-        var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-        var BitmapData:BitmapData = new BitmapData(Width, Height, 0x00FFFFFF);;
-        BitmapData.copyPixels(icon.pixels, icon.rect, new Point(100, 100));
-    }
-    
-	    var songText = new FlxText(750 - i*20 * 0.75, i*75 * 0.75 + 355, 0, songs[i].songName, 30);
-			songText.setFormat(font, 30, FlxColor.WHITE, LEFT);
-			songText.camera = camSong;
-			var length = 400;
-			if (songText.width > length) songText.scale.x =  length / songText.width;
-			songText.offset.x += songText.width * (1 -songText.scale.x) / 2;
-			songtextsGroup.push(songText);
-			
-			Paths.currentModDirectory = songs[i].folder;
-			
-			var barShadow:FlxSprite = new FlxSprite().loadGraphic(Paths.image(filePath + 'songBarShadow'));
-			add(barShadow);
-			barShadow.camera = camSong;
-			barShadow.scale.set(1, 1);
-			barShadow.x = songText.x - 750;
-			barShadow.y = songText.y -300;
-			barShadow.updateHitbox();
-			barShadow.color = songs[i].color;
-			barsArray.push(barShadow);
-		    
-			var bar:FlxSprite = new FlxSprite().loadGraphic(Paths.image(filePath + 'songBar'));
-			add(bar);
-			bar.camera = camSong;
-			bar.scale.set(1, 1);
-			bar.x = songText.x - 750;
-			bar.y = songText.y - 300;
-			bar.updateHitbox();
-			barsArray.push(bar);
-			
-			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
-			add(icon);
-			icon.scale.set(0.35, 0.35);
-			icon.camera = camSong;
-			icon.x = songText.x + 370;
-			icon.y = songText.y + songText.height / 2 - icon.height / 2;
-			icon.updateHitbox();
-			icon.scrollFactor.set(1,1);
-			iconsArray.push(icon);						
-			
-			add(songText);			
-}*/

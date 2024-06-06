@@ -1195,14 +1195,24 @@ class FreeplayState extends MusicBeatState {
 				changeDiff(0);
 			}
 			
-			if (controls.UI_UP_P)
+			/*
+			if (controls.UI_DOWN_P) {
+					changeSong(1);
+					curSelectedFloat = curSelected;
+				} else if (controls.UI_UP_P) {
+					changeSong(-1);
+					curSelectedFloat = curSelected;
+				}
+				*/
+			
+			if (controls.UI_UP_P) {
 				searchChangeSong(-1);
 				changeDiff(0);
-			else if (controls.UI_DOWN_P)
+			} else if (controls.UI_DOWN_P) {
 				searchChangeSong(1);
 				changeDiff(0);
+			}
 		}
-	}
 	
 	function searchChangeSong(num:Int) {
 		searchSelected += num;

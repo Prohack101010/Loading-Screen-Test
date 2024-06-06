@@ -8,30 +8,31 @@ import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import openfl.display.Shape;
 
-import HealthIcon;
-import editors.ChartingState;
+import objects.HealthIcon;
+import states.editors.ChartingState;
 
-import GameplayChangersSubstate;
-import ResetScoreSubState;
+import substates.GameplayChangersSubstate;
+import substates.ResetScoreSubState;
 
 import flixel.addons.ui.FlxInputText;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup;
 import flixel.addons.ui.FlxInputText;
 import flixel.util.FlxStringUtil;
-import flixel.sound.FlxSound;
+import flixel.system.FlxSound;
 import flixel.ui.FlxBar;
+import flixel.FlxSprite;
 import flixel.math.FlxRect;
 
 #if MODS_ALLOWED
 import sys.FileSystem;
 #end
 
-import FreeplayState;
+import states.FreeplayState;
 
-import PlayState;
-import LoadingState;
-import MainMenuState;
+import states.PlayState;
+import states.LoadingState;
+import states.MainMenuState;
 import options.OptionsState;
 
 /*
@@ -809,6 +810,18 @@ class FreeplayState extends MusicBeatState {
 			vocals.destroy();
 			vocals = null;
 		}
+		else
+		{
+			vocals = new FlxSound();
+
+		    FlxG.sound.list.add(vocals);
+    		FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 0.7);
+    		vocals.play();
+    		vocals.persist = true;
+    		vocals.looped = true;
+    		vocals.volume = 0.7;
+	    	instPlaying = curSelected;
+		}
 	
 		if (play) {
 			FlxG.sound.music.stop();
@@ -993,12 +1006,21 @@ class FreeplayState extends MusicBeatState {
 	}
 	
 	public static function destroyFreeplayVocals() {
+		if(vocals != null) {
+			vocals.stop();
+			vocals.destroy();
+		}
+		vocals = null;
+	}
+	/*
+	public static function destroyFreeplayVocals() {
 		if(FreeplayState.vocals != null) {
 			FreeplayState.vocals.stop();
 			FreeplayState.vocals.destroy();
 		}
 		FreeplayState.vocals = null;
 	}
+	*/
 	
 	function closeListenMenu() {
 		listening = false;

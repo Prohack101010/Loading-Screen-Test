@@ -1454,7 +1454,7 @@ class FreeplayState extends MusicBeatState {
 		songIcon.updateHitbox();
 	}
 	
-	function changeDiff(value:Int)
+	function changeDiff(value:Int = 0)
 	{
 	    curDifficulty += value;
 

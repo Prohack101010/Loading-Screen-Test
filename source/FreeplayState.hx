@@ -14,15 +14,31 @@ import editors.ChartingState;
 import GameplayChangersSubstate;
 import ResetScoreSubState;
 
-import flixel.tweens.FlxTween;
-import flixel.addons.ui.FlxInputText;
+// Normal Psych Imports
+import editors.ChartingState;
+import flash.text.TextField;
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxMath;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+import lime.utils.Assets;
+import flixel.system.FlxSound;
+import openfl.utils.Assets as OpenFlAssets;
+import flixel.addons.display.FlxBackdrop;
+import WeekData;
+import flixel.FlxCamera;
+
+// NF Menu imports
 import flixel.group.FlxGroup;
 import flixel.addons.ui.FlxInputText;
 import flixel.util.FlxStringUtil;
-import flixel.system.FlxSound;
 import flixel.ui.FlxBar;
-import flixel.FlxSprite;
 import flixel.math.FlxRect;
 
 #if MODS_ALLOWED
@@ -804,12 +820,6 @@ class FreeplayState extends MusicBeatState {
 			FlxG.sound.list.add(vocals);
 			vocals.persist = true;
 			vocals.looped = true;
-		}
-		else if (vocals != null)
-		{
-			vocals.stop();
-			vocals.destroy();
-			vocals = null;
 		}
 		else
 		{

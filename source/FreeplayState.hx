@@ -1474,7 +1474,7 @@ class FreeplayState extends MusicBeatState {
 		
 		try {
 			var song = songs[curSelected].songName.toLowerCase();
-			if (Paths.fileExists('data/' + Paths.formatToSongPath(song) + '/' + Paths.formatToSongPath(song) + CoolUtil.getDifficultyFilePath(curDifficulty)+'.json', TEXT)) {
+			if (Paths.fileExists('data/' + Paths.formatToSongPath(song) + '/' + Paths.formatToSongPath(song) + CoolUtil.getDifficultyFilePath(curDifficulty), TEXT)) {
 				var poop:String = Highscore.formatSong(song, curDifficulty);
 			}
 		} catch(e:Dynamic) {
@@ -1488,7 +1488,7 @@ class FreeplayState extends MusicBeatState {
 	{		
 		try {
 		lastDifficultyName = CoolUtil.difficulties[curDifficulty];
-		difficultyText.text = lastDifficultyName.toUpperCase;
+		difficultyText.text = lastDifficultyName.toUpperCase();
 		difficultyText.x = (820 - difficultyText.width) / 2;
 		if (difficultyText.width > 300)
 			difficultyText.scale.set(300/difficultyText.width, 300/difficultyText.width);

@@ -126,6 +126,7 @@ class FreeplayState extends MusicBeatState {
 	public static var curDifficulty:Int = -1;
 	private static var lastDifficultyName:String = '';
 	
+	var camBlackFade:FlxCamera;
 	var camGame:FlxCamera;
 	var camSong:FlxCamera;
 	var camUI:FlxCamera;
@@ -149,6 +150,9 @@ class FreeplayState extends MusicBeatState {
 		loadSong();
 		
 		camGame = new FlxCamera();
+		
+		camBlackFade = new FlxCamera();
+		camBlackFade.bgColor.alpha = 0;
 		
 		camSong = new FlxCamera();
 		camSong.bgColor = 0x00;
@@ -183,6 +187,7 @@ class FreeplayState extends MusicBeatState {
 		camUIInfo_Search = new FlxCamera();
 		camUIInfo_Search.bgColor = 0x00;
 		
+		FlxG.cameras.add(camBlackFade, false);
 		FlxG.cameras.add(camSong, false);
 		FlxG.cameras.add(camInfo, false);
 		//FlxG.cameras.add(camUI, false);
@@ -511,13 +516,47 @@ class FreeplayState extends MusicBeatState {
 		blackBG.antialiasing = ClientPrefs.globalAntialiasing;
 		blackBG.camera = camBG;
 		add(blackBG);
+		
+		Paths.currentModDirectory = songs[curSelected].folder;
+		PlayState.storyWeek = songs[curSelected].week;
+		
+		CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
+		var diffStr:String = WeekData.getCurrentWeek().difficulties;
+
+		if(diffStr != null && diffStr.length > 0)
+		{
+			var diffs:Array<String> = diffStr.split(',');
+			var i:Int = diffs.length - 1;
+			while (i > 0)
+			{
+				if(diffs[i] != null)
+				{
+					if(diffs[i].length < 1) diffs.remove(diffs[i]);
+				}
+				--i;
+			}
+
+			if(diffs.length > 0 && diffs[0].length > 0)
+			{
+				CoolUtil.difficulties = diffs;
+			}
+		}
+		
+		if(CoolUtil.difficulties.contains(CoolUtil.defaultDifficulty))
+		{
+			curDifficulty = Math.round(Math.max(0, CoolUtil.defaultDifficulties.indexOf(CoolUtil.defaultDifficulty)));
+		}
+		else
+		{
+			curDifficulty = 0;
+		}
 								
 		super.create();
 		
 		curSelectedFloat = curSelected;
 		changeSong(0);
-		changeDiff(0);
 		
+		CustomFadeTransition.nextCamera = camBlackFade;
 		camSong.scroll.x = FlxMath.lerp(-(curSelected) * 20 * 0.75, camSong.scroll.x, 0);
 		camSong.scroll.y = FlxMath.lerp((curSelected) * 75 * 0.75, camSong.scroll.y, 0);
 	}
@@ -630,40 +669,6 @@ class FreeplayState extends MusicBeatState {
 			
 			camSong.scroll.x = FlxMath.lerp(-(curSelectedFloat) * 20 * 0.75, camSong.scroll.x, FlxMath.bound(1 - (elapsed * 9), 0, 1));
 			camSong.scroll.y = FlxMath.lerp((curSelectedFloat) * 75 * 0.75, camSong.scroll.y, FlxMath.bound(1 - (elapsed * 9), 0, 1));
-		}
-		
-		Paths.currentModDirectory = songs[curSelected].folder;
-		PlayState.storyWeek = songs[curSelected].week;
-		
-		CoolUtil.difficulties = CoolUtil.defaultDifficulties.copy();
-		var diffStr:String = WeekData.getCurrentWeek().difficulties;
-
-		if(diffStr != null && diffStr.length > 0)
-		{
-			var diffs:Array<String> = diffStr.split(',');
-			var i:Int = diffs.length - 1;
-			while (i > 0)
-			{
-				if(diffs[i] != null)
-				{
-					if(diffs[i].length < 1) diffs.remove(diffs[i]);
-				}
-				--i;
-			}
-
-			if(diffs.length > 0 && diffs[0].length > 0)
-			{
-				CoolUtil.difficulties = diffs;
-			}
-		}
-		
-		if(CoolUtil.difficulties.contains(CoolUtil.defaultDifficulty))
-		{
-			curDifficulty = Math.round(Math.max(0, CoolUtil.defaultDifficulties.indexOf(CoolUtil.defaultDifficulty)));
-		}
-		else
-		{
-			curDifficulty = 0;
 		}
 		
 		changeInfoMenu(elapsed);
